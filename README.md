@@ -1,82 +1,87 @@
 
 ---
 
-# **WTI Oil Forecasting Project**
+# WTI Oil Returns and Volatility Modeling Project
 
-![EViews](https://img.shields.io/badge/EViews-13-blue)  
-![License Required](https://img.shields.io/badge/License-Paid%20Required-orange)  
-![Dataset](https://img.shields.io/badge/Data-Bloomberg-green)  
+This repository contains an advanced time series analysis project focused on forecasting WTI crude oil returns and volatility. The project employs **EViews 13's internal programming language** to implement a wide range of econometric models for forecasting and performance evaluation.
 
-This repository contains the files and methodology used to forecast WTI crude oil returns and volatility on a 15–20-day horizon using advanced econometric techniques. The project focuses on understanding the dynamic relationships in the oil market and building predictive models for better decision-making.
+> **Disclaimer:** Running the EViews programs requires a **paid version of EViews 13**.
 
 ---
 
-## **Overview**
-
-This project investigates oil market dynamics and leverages time series models written in **EViews' internal programming language** to predict WTI crude oil returns and volatility. Key objectives include:
-
-- Identifying the correlation between WTI and diesel returns.
-- Modeling WTI returns using a **SETAR model** with diesel returns as a threshold variable.
-- Evaluating model performance against ARMA and Markov switching benchmarks using the **Diebold-Mariano test**.
-- Forecasting volatility using **FIGARCHX**, outperforming GARCH(1,1) and custom asymmetric FIGARCH models.
+## Key Features
+- **Variable of Interest:** Daily changes in the WTI crude oil spot price (in levels).
+- **Mean Modeling:** Comparison of ARMA, SETAR, TAR, and Markov Switching models.
+- **Volatility Modeling:** FIGARCHX with Brentd as a variance regressor, benchmarked against GARCH(1,1).
+- **Model Validation:** Post-estimation diagnostic tests and performance metrics, including MSE, MAE, RMSE, and Theil inequality coefficients.
+- **Rolling Window Forecasting:** 15-day and 20-day rolling forecasts for the mean and volatility, respectively.
 
 ---
 
-## **Files**
+## Methodology
 
-- **`data.xls`**: Original dataset containing WTI and diesel price series, sourced from Bloomberg.
-- **`200029804.if3103.prg`**: EViews program file written in **EViews' internal language** for running the analysis and generating forecasts.
-- **`README.md`**: Documentation for reproducing the project.
+### Data Preparation
+- **Unit Root Testing:** Applied Breakpoint Unit Root and ADF tests to ensure stationarity.
+- **Differencing:** Converted all series to first differences to address unit root issues.
+- **Break Detection:** Identified structural breaks due to COVID-19 (April 2020) and excluded pre-break data to improve model robustness.
 
----
+### Mean Models
+- **SETAR (Chosen Model):** Demonstrated the best forecasting performance and passed all post-estimation diagnostic tests.
+- **ARMA:** Used as a baseline candidate model, with AR(3) identified as the best configuration.
+- **Markov Switching:** Explored regime-switching dynamics with significant transition parameters.
+- **TAR:** Included lag-based threshold variables for comparison.
 
-## **Requirements**
-
-- **EViews 13**:  
-  This project requires the **paid version** of EViews software (version 13) to run the `.prg` file and reproduce the results.  
-  > *A valid license is necessary to access all functionalities of the software.*  
-
----
-
-## **Methodology**
-
-### **1. Data Import and Preprocessing**
-- Import the dataset from `data.xls` into EViews.
-- Analyze and clean the time series data for consistency.
-
-### **2. Modeling**
-- **SETAR Model**: Threshold variable defined using diesel returns to improve return predictions.
-- **Volatility Modeling**: FIGARCHX used for volatility forecasting, capturing long memory effects and external variables.
-
-### **3. Evaluation**
-- Benchmark models include ARMA, Markov switching models, and GARCH(1,1).
-- The **Diebold-Mariano test** validates the predictive accuracy of the proposed models.
-
-### **4. Results**
-- The SETAR model with diesel returns as the threshold variable demonstrated superior performance in return forecasting.
-- FIGARCHX outperformed standard GARCH(1,1) and custom asymmetric FIGARCH models in volatility prediction.
+### Volatility Models
+- **FIGARCHX (Chosen Model):** Outperformed GARCH(1,1) by capturing long memory effects and including Brentd as a variance regressor.
+- **GARCH(1,1):** Served as a benchmark, showing robust but comparatively weaker performance.
 
 ---
 
-## **How to Run**
-
-1. Open **EViews 13**.
-2. Import `data.xls` using **File > Open > Foreign Data as Workfile**.
-3. Run the `.prg` file using **File > Run Program** to replicate the analysis.
+## Key Results
+- **Mean Modeling:** The SETAR model excelled in forecasting WTI returns, outperforming ETS-smoothed benchmarks across all loss functions.
+- **Volatility Modeling:** FIGARCHX demonstrated superior accuracy in forecasting volatility, accounting for long memory and Brentd's variance effects.
 
 ---
 
-## **Key Insights**
-
-- Diesel returns are a significant threshold variable for WTI returns, enhancing forecasting accuracy.
-- FIGARCHX models capture the complexity of volatility better than traditional methods, making them ideal for short-horizon forecasting.
+## Future Work
+- Incorporating intraday data (e.g., hourly observations of the S&P Energy Index) and applying MIDAS techniques to improve both mean and volatility models.
+- Expanding the dataset by merging similar subsets post-structural break to increase sample size and model robustness.
 
 ---
 
-## **Future Work**
+## Running the Code
+1. **Import Data:**
+   - Load `data.xls` into EViews as a workfile:  
+     `File -> Open -> Foreign Data as Workfile`.
+2. **Run Program:**
+   - Execute `.prg` files to replicate the models:  
+     `File -> Open -> Programs`.
+3. **Requirements:**
+   - **EViews 13 (Paid Version):** Necessary to run the code.
+   - Knowledge of EViews’ internal programming language.
 
-- Extend analysis to include macroeconomic variables (e.g., interest rates, geopolitical factors).
-- Test models on additional datasets to assess robustness under different market conditions.
-- Incorporate machine learning techniques for further improvements in forecasting accuracy.
+---
+
+## Files
+- `data.xls`: Raw dataset for the project.
+- `200029804.if3103.prg`: EViews program implementing the econometric models.
+- `README.md`: Project documentation.
+
+---
+
+## Model Specifications
+- **Mean Model (SETAR):**
+  ```
+  wtid c brentd propaned nygasd ladieseld @thresh wtid
+  ```
+- **Volatility Model (FIGARCHX):**
+  ```
+  wtid c @ brentd
+  ```
+
+---
+
+## Contributions and Acknowledgments
+This project was conducted to explore advanced forecasting techniques for financial time series, specifically within the context of crude oil markets. Suggestions for improvements and further development are welcome.
 
 ---
